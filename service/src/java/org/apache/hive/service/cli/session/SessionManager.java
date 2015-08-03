@@ -398,5 +398,25 @@ public class SessionManager extends CompositeService {
   public int getOpenSessionCount() {
     return handleToSession.size();
   }
+
+
+  private static ThreadLocal<HiveSession> handles = new ThreadLocal();
+
+  public static HiveSession getCurrentSessionHandle() {
+    return handles.get();
+  }
+
+  static void atachSessionHandle(HiveSession h) {
+    handles.set(h);
+  }
+
+  static void detachSessionHandle() {
+    handles.remove();
+  }
+
+  public static void reattachSession(HiveSession session) {
+    ((HiveSessionImpl)session).acquire(false);
+  }
+
 }
 

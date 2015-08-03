@@ -278,6 +278,7 @@ public class HiveSessionImpl implements HiveSession {
     if (userAccess) {
       lastAccessTime = System.currentTimeMillis();
     }
+    SessionManager.atachSessionHandle(this);
   }
 
   /**
@@ -294,6 +295,7 @@ public class HiveSessionImpl implements HiveSession {
           (ThreadWithGarbageCleanup) ThreadWithGarbageCleanup.currentThread();
       currentThread.cacheThreadLocalRawStore();
     }
+    SessionManager.detachSessionHandle();
     if (userAccess) {
       lastAccessTime = System.currentTimeMillis();
     }
