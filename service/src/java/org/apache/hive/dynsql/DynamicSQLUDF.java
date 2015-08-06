@@ -1,5 +1,7 @@
 package org.apache.hive.dynsql;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.ql.exec.Description;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentLengthException;
@@ -29,6 +31,9 @@ import java.util.Map;
         extended = "Example:\n"
                 + "  > SELECT _FUNC_('org.apache.hive.dynsql.TestDynamicSQLProvider')")
 public class DynamicSQLUDF extends GenericUDF {
+
+    private final Log LOG = LogFactory.getLog(DynamicSQLUDF.class.getName());
+
     private transient Converter elemConverter;
     private transient Converter szConverter;
     private final List<Object> ret = new ArrayList<Object>();
@@ -36,6 +41,10 @@ public class DynamicSQLUDF extends GenericUDF {
 
     @Override
     public ObjectInspector initialize(ObjectInspector[] arguments) throws UDFArgumentException {
+
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        LOG.debug(loader.getResource("org.apache.hive.service.cli.session.SessionManager"));
 
         if (arguments.length != 1) {
             throw new UDFArgumentLengthException(
