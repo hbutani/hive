@@ -240,6 +240,9 @@ class BeeLineOpts implements Completer {
 
   public boolean set(String key, String value, boolean quiet) {
     try {
+      if (key == "force") {
+        setForce(Boolean.valueOf(value));
+      }
       beeLine.getReflector().invoke(this, "set" + key, new Object[] {value});
       return true;
     } catch (Exception e) {
